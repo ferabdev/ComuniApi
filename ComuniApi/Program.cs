@@ -1,3 +1,5 @@
+using ComuniApi.BLL.Conceptos;
+using ComuniApi.BLL.EdoCuentas;
 using ComuniApi.BLL.Users;
 using ComuniApi.DAL;
 using Microsoft.AspNetCore.Identity;
@@ -65,7 +67,10 @@ builder.Services.AddDbContext<ComuniApi.DAL.ComuniContext>(options =>
         new MySqlServerVersion(new Version(8, 0, 43))
         ));
 //builder.Services.AddScoped<IPasswordHasher<UsuarioEntity>, PasswordHasher<UsuarioEntity>>();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<ConceptosService>();
+builder.Services.AddScoped<EdoCuentasService>();
 
 
 builder.Services.AddAuthentication("Bearer")

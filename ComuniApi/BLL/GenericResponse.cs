@@ -5,7 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ComuniApi.BAL
+namespace ComuniApi.BLL
 {
     public class GenericResponse<T>
     {

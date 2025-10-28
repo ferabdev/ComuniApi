@@ -1,9 +1,10 @@
-﻿using ComuniApi.BAL;
-using ComuniApi.DAL;
+﻿using ComuniApi.DAL;
+using ComuniApi.DAL.Entidades;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Security.Claims;
 
 namespace ComuniApi.BLL.Users
 {
@@ -11,11 +12,12 @@ namespace ComuniApi.BLL.Users
     {
         private readonly ComuniContext _context;
         private readonly PasswordHasher<UsuarioEntity> _hasher = new();
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AuthService(ComuniContext context)
+        public AuthService(ComuniContext context, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
-            //_hasher = hasher;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<GenericResponse<UserModel>> RegisterAsync(UserModelReq model)
@@ -104,6 +106,17 @@ namespace ComuniApi.BLL.Users
                     Message = "Error al procesar el login",
                 };
             }
+        }
+
+        public int? ObtenerIdUsuario()
+        {
+            var httpContext = _httpContextAccessor.HttpContext;
+            if (httpContext == null) throw new Exception("No se encontro el httpcontext");
+
+            var user = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            int? userId = user != null ? int.Parse(user) : null;
+
+            return userId;
         }
     }
 }

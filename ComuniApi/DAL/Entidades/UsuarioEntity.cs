@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ComuniApi.DAL
+namespace ComuniApi.DAL.Entidades
 {
     public class UsuarioEntity
     {
@@ -17,5 +17,7 @@ namespace ComuniApi.DAL
 
         [Required, EmailAddress]
         public string Email { get; set; }
+
+        public virtual ICollection<EdoCuentaEntity> EdoCuentas { get; set; } = new List<EdoCuentaEntity>();
     }
 }
