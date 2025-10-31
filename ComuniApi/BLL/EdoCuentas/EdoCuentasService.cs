@@ -70,13 +70,16 @@ namespace ComuniApi.BLL.EdoCuentas
         {
             try
             {
-                var userId = _authService.ObtenerIdUsuario();
-                if (userId == null)
+                var comunidadid = _authService.ObtenerIdComunidad();
+                var user = await _context.Usuarios
+                    .FirstOrDefaultAsync(u => u.Id == model.UsuarioId && u.ComunidadId == comunidadid);
+
+                if (user == null)
                 {
                     return new GenericResponse<string>
                     {
-                        Status = System.Net.HttpStatusCode.Unauthorized,
-                        Message = "Usuario no autenticado.",
+                        Status = System.Net.HttpStatusCode.NotFound,
+                        Message = "Usuario no encontrado en la comunidad.",
                     };
                 }
 
@@ -98,7 +101,7 @@ namespace ComuniApi.BLL.EdoCuentas
                     Monto = model.Monto,
                     Fecha = DateTime.Now,
                     FechaLimite = model.FechaLimite,
-                    UsuarioId = userId.Value
+                    UsuarioId = user.Id
                 };
                 await _context.EdoCuentas.AddAsync(cargo);
 

@@ -2,6 +2,7 @@
 {
     public class CargoAddReq
     {
+        public int UsuarioId { get; set; }
         public int ConceptoId { get; set; }
         public decimal Monto { get; set; }
         public DateTime FechaLimite { get; set; }
