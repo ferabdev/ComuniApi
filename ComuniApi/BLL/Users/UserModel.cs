@@ -9,5 +9,6 @@ namespace ComuniApi.BLL.Users
     public class UserModel : UserModelReq
     {
         public string Rol { get; set; } = string.Empty;
+        public string Comunidad { get; set; } = string.Empty;
     }
 }

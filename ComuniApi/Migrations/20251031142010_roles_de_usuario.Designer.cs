@@ -4,6 +4,7 @@ using ComuniApi.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ComuniApi.Migrations
 {
     [DbContext(typeof(ComuniContext))]
-    partial class ComuniContextModelSnapshot : ModelSnapshot
+    [Migration("20251031142010_roles_de_usuario")]
+    partial class roles_de_usuario
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,47 +24,6 @@ namespace ComuniApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
-
-            modelBuilder.Entity("ComuniApi.DAL.Entidades.ComunidadEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Correo")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<string>("Direccion")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
-
-                    b.Property<int>("MaxUsers")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Nombre")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Comunidades");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Correo = "",
-                            Direccion = "Direccion test",
-                            MaxUsers = 0,
-                            Nombre = "Comunidad test"
-                        });
-                });
 
             modelBuilder.Entity("ComuniApi.DAL.Entidades.ConceptoEntity", b =>
                 {
@@ -162,11 +124,6 @@ namespace ComuniApi.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ComunidadId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -193,8 +150,6 @@ namespace ComuniApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ComunidadId");
-
                     b.HasIndex("RolId");
 
                     b.ToTable("Usuarios");
@@ -213,26 +168,13 @@ namespace ComuniApi.Migrations
 
             modelBuilder.Entity("ComuniApi.DAL.Entidades.UsuarioEntity", b =>
                 {
-                    b.HasOne("ComuniApi.DAL.Entidades.ComunidadEntity", "Comunidad")
-                        .WithMany("Usuarios")
-                        .HasForeignKey("ComunidadId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("ComuniApi.DAL.Entidades.RolEntity", "Rol")
                         .WithMany()
                         .HasForeignKey("RolId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Comunidad");
-
                     b.Navigation("Rol");
-                });
-
-            modelBuilder.Entity("ComuniApi.DAL.Entidades.ComunidadEntity", b =>
-                {
-                    b.Navigation("Usuarios");
                 });
 
             modelBuilder.Entity("ComuniApi.DAL.Entidades.UsuarioEntity", b =>

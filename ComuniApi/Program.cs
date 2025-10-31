@@ -1,3 +1,4 @@
+using ComuniApi.BLL.Comunidades;
 using ComuniApi.BLL.Conceptos;
 using ComuniApi.BLL.EdoCuentas;
 using ComuniApi.BLL.Users;
@@ -71,6 +72,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ConceptosService>();
 builder.Services.AddScoped<EdoCuentasService>();
+builder.Services.AddScoped<ComunidadService>();
 
 
 builder.Services.AddAuthentication("Bearer")

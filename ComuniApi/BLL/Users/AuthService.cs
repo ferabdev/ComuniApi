@@ -23,7 +23,10 @@ namespace ComuniApi.BLL.Users
         public async Task<GenericResponse<UserModel>> RegisterAsync(UserModelReq model)
         {
             // Verificar si ya existe
-            var exists = await _context.Usuarios.AnyAsync(u => u.Username == model.Nombre || u.Email == model.Correo);
+            var exists = await _context.Usuarios
+                .AnyAsync(u => u.ComunidadId == model.ComunidadId 
+                && (u.Username == model.Nombre || u.Email == model.Correo));
+
             if (exists) return new GenericResponse<UserModel>
             {
                 Status = HttpStatusCode.Conflict,
@@ -34,10 +37,15 @@ namespace ComuniApi.BLL.Users
             {
                 Username = model.Usuario,
                 NombreCompleto = model.Nombre,
-                Email = model.Correo
+                Email = model.Correo,
+                ComunidadId = model.ComunidadId,
             };
 
             usuario.PasswordHash = _hasher.HashPassword(usuario, model.Password);
+
+            var comunidad = await _context.Comunidades
+                .Include(c => c.Usuarios)
+                .SingleAsync(c => c.Id == model.ComunidadId);
 
             _context.Usuarios.Add(usuario);
             await _context.SaveChangesAsync();
@@ -51,7 +59,9 @@ namespace ComuniApi.BLL.Users
                     Id = usuario.Id,
                     Usuario = usuario.Username,
                     Nombre = usuario.NombreCompleto,
-                    Correo = usuario.Email
+                    Correo = usuario.Email,
+                    ComunidadId = usuario.ComunidadId,
+                    Comunidad = comunidad.Nombre
                 },
             };
         }
@@ -60,7 +70,9 @@ namespace ComuniApi.BLL.Users
         {
             try
             {
-                var usuario = await _context.Usuarios.SingleOrDefaultAsync(u => u.Username == model.Username);
+                var usuario = await _context.Usuarios
+                    .Include(u => u.Comunidad)
+                    .SingleOrDefaultAsync(u => u.ComunidadId == model.ComunidadId && u.Username == model.Username);
                 if (usuario == null) return new GenericResponse<UserModel>
                 {
                     Status = HttpStatusCode.Unauthorized,
@@ -87,7 +99,9 @@ namespace ComuniApi.BLL.Users
                             Id = usuario.Id,
                             Usuario = usuario.Username,
                             Nombre = usuario.NombreCompleto,
-                            Correo = usuario.Email
+                            Correo = usuario.Email,
+                            ComunidadId = usuario.ComunidadId,
+                            Comunidad = usuario.Comunidad.Nombre,
                         },
                     };
                 }
