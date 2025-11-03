@@ -13,6 +13,6 @@ namespace ComuniApi.BLL.Users
         public string Nombre { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public string Correo { get; set; } = string.Empty;
-        public int ComunidadId { get; set; }
+        public string CodigoComunidad { get; set; } = string.Empty;
     }
 }

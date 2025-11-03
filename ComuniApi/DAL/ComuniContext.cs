@@ -27,7 +27,8 @@ namespace ComuniApi.DAL
                         Id = 1,
                         Nombre = "Comunidad test",
                         Direccion = "Direccion test",
-                        Correo = ""
+                        Correo = "",
+                        CodigoComunidad = "WUEBOS"
                     });
 
                 entity.HasKey(e => e.Id);
@@ -36,6 +37,11 @@ namespace ComuniApi.DAL
                 entity.Property(e => e.Direccion).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.Correo).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.MaxUsers).IsRequired();
+
+                //entidad tiene codigo de comunidad unico e irrepetible
+                entity.HasIndex(e => e.CodigoComunidad).IsUnique();
+                entity.Property(e => e.CodigoComunidad).IsRequired().HasMaxLength(6).HasDefaultValue("-");
+
                 entity.HasMany(e => e.Usuarios)
                       .WithOne(e => e.Comunidad)
                       .HasForeignKey(e => e.ComunidadId)
@@ -65,7 +71,6 @@ namespace ComuniApi.DAL
 
             modelBuilder.Entity<UsuarioEntity>(entity =>
             {
-                PasswordHasher<UsuarioEntity> _hasher = new();
                 var usuario = new UsuarioEntity
                 {
                     Id = 1,
@@ -73,10 +78,9 @@ namespace ComuniApi.DAL
                     NombreCompleto = "Administrador Principal",
                     Email = "",
                     ComunidadId = 1,
-                    RolId = 3
+                    RolId = 3,
+                    PasswordHash = "AQAAAAIAAYagAAAAEJMWmqGEeofwL3f2r0uCFpykRHUwRHd2S3axzTA2Ox0AVE1hxv7oB/FeWzQJcPb/aA=="
                 };
-
-                usuario.PasswordHash = _hasher.HashPassword(usuario, "gitgud6");
 
                 entity.HasData(
                     usuario

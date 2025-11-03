@@ -10,12 +10,12 @@ namespace ComuniApi.BLL.Users
     {
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public int ComunidadId { get; set; }
+        public string CodigoComunidad { get; set; }
     }
 
     public class AuthRes
     {
-        public UserModel? User { get; set; } = null;
+        public UserModel User { get; set; } = null;
         public string Token { get; set; } = string.Empty;
     }
 }

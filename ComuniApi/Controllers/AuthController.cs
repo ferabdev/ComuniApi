@@ -41,7 +41,7 @@ namespace ComuniApi.Controllers
                     new Claim(ClaimTypes.Name, result.Data.Nombre),
                     new Claim(ClaimTypes.UserData, result.Data.Usuario),
                     new Claim(ClaimTypes.NameIdentifier, result.Data.Id.ToString()),
-                    new Claim("ComunidadId", result.Data.ComunidadId.ToString()),
+                    new Claim("CodigoComunidad", result.Data.CodigoComunidad),
                     new Claim("Comunidad", result.Data.Comunidad),
                     new Claim(ClaimTypes.Role, result.Data.Rol)
                 };
@@ -84,7 +84,7 @@ namespace ComuniApi.Controllers
                     new Claim(ClaimTypes.Name, result.Data.Nombre),
                     new Claim(ClaimTypes.UserData, result.Data.Usuario),
                     new Claim(ClaimTypes.NameIdentifier, result.Data.Id.ToString()),
-                    new Claim("ComunidadId", result.Data.ComunidadId.ToString()),
+                    new Claim("CodigoComunidad", result.Data.CodigoComunidad),
                     new Claim("Comunidad", result.Data.Comunidad),
                     new Claim(ClaimTypes.Role, result.Data.Rol)
                 };
