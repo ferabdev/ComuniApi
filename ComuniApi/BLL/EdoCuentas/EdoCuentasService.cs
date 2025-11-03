@@ -38,7 +38,7 @@ namespace ComuniApi.BLL.EdoCuentas
                 var cargo = new EdoCuentaEntity
                 {
                     Descripcion = concepto,
-                    Monto = model.Monto,
+                    Monto = -model.Monto,
                     Fecha = DateTime.Now,
                     FechaLimite = model.FechaPago,
                     UsuarioId = user.Id
@@ -101,6 +101,7 @@ namespace ComuniApi.BLL.EdoCuentas
                 var cargo = new EdoCuentaEntity
                 {
                     Descripcion = concepto,
+                    ConceptoId = model.ConceptoId,
                     Monto = model.Monto,
                     Fecha = DateTime.Now,
                     FechaLimite = model.FechaLimite,

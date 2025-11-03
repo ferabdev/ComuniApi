@@ -42,7 +42,8 @@ namespace ComuniApi.Controllers
                     new Claim(ClaimTypes.UserData, result.Data.Usuario),
                     new Claim(ClaimTypes.NameIdentifier, result.Data.Id.ToString()),
                     new Claim("ComunidadId", result.Data.ComunidadId.ToString()),
-                    new Claim("Comunidad", result.Data.Comunidad)
+                    new Claim("Comunidad", result.Data.Comunidad),
+                    new Claim(ClaimTypes.Role, result.Data.Rol)
                 };
 
                 var token = new JwtSecurityToken(
@@ -84,7 +85,8 @@ namespace ComuniApi.Controllers
                     new Claim(ClaimTypes.UserData, result.Data.Usuario),
                     new Claim(ClaimTypes.NameIdentifier, result.Data.Id.ToString()),
                     new Claim("ComunidadId", result.Data.ComunidadId.ToString()),
-                    new Claim("Comunidad", result.Data.Comunidad)
+                    new Claim("Comunidad", result.Data.Comunidad),
+                    new Claim(ClaimTypes.Role, result.Data.Rol)
                 };
 
                 var token = new JwtSecurityToken(

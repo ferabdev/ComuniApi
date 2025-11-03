@@ -1,4 +1,5 @@
 ﻿using ComuniApi.DAL.Entidades;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -49,15 +50,38 @@ namespace ComuniApi.DAL
                 entity.Property(e => e.FechaLimite).IsRequired();
                 entity.Property(e => e.Monto).IsRequired().HasColumnType("decimal(18,2)");
                 entity.Property(e => e.UsuarioId).IsRequired();
+                entity.Property(e => e.ConceptoId);
+                entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(200);
 
                 entity.HasOne(e => e.Usuario)
                       .WithMany(e => e.EdoCuentas)
                       .HasForeignKey(e => e.UsuarioId)
                       .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(e => e.Concepto)
+                        .WithMany(e => e.EdoCuentas)
+                        .HasForeignKey(e => e.ConceptoId)
+                        .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<UsuarioEntity>(entity =>
             {
+                PasswordHasher<UsuarioEntity> _hasher = new();
+                var usuario = new UsuarioEntity
+                {
+                    Id = 1,
+                    Username = "administrador",
+                    NombreCompleto = "Administrador Principal",
+                    Email = "",
+                    ComunidadId = 1,
+                    RolId = 3
+                };
+
+                usuario.PasswordHash = _hasher.HashPassword(usuario, "gitgud6");
+
+                entity.HasData(
+                    usuario
+                );
+
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
                 entity.Property(e => e.Username).IsRequired().HasMaxLength(50);
@@ -93,7 +117,8 @@ namespace ComuniApi.DAL
             {
                 entity.HasData(
                     new RolEntity { Id = 1, Descripcion = "Usuario" },
-                    new RolEntity { Id = 2, Descripcion = "Administrador" }
+                    new RolEntity { Id = 2, Descripcion = "Administrador" },
+                    new RolEntity { Id = 3, Descripcion = "Super Administrador" }
                     );
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();

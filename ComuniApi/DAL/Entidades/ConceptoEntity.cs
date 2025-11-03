@@ -4,5 +4,6 @@
     {
         public int Id { get; set; }
         public string Descripcion { get; set; }
+        public virtual ICollection<EdoCuentaEntity> EdoCuentas { get; set; } = new List<EdoCuentaEntity>();
     }
 }

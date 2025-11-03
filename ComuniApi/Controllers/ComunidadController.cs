@@ -26,5 +26,13 @@ namespace ComuniApi.Controllers
             var response = await _comunidadService.ObtenerUsuariosComunidad(comunidadId);
             return StatusCode((int)response.Status, response);
         }
+
+        [HttpPost("CrearComunidad")]
+        [Authorize(Roles = Constantes.Roles.SuperAdmin)]
+        public async Task<IActionResult> CrearComunidad(ComunidadReq model)
+        {
+            var response = await _comunidadService.CrearComunidad(model);
+            return StatusCode((int)response.Status, response);
+        }
     }
 }

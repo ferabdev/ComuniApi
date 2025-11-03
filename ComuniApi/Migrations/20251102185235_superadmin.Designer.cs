@@ -4,6 +4,7 @@ using ComuniApi.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ComuniApi.Migrations
 {
     [DbContext(typeof(ComuniContext))]
-    partial class ComuniContextModelSnapshot : ModelSnapshot
+    [Migration("20251102185235_superadmin")]
+    partial class superadmin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,13 +104,9 @@ namespace ComuniApi.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ConceptoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("varchar(200)");
+                        .HasColumnType("longtext");
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime(6)");
@@ -122,8 +121,6 @@ namespace ComuniApi.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ConceptoId");
 
                     b.HasIndex("UsuarioId");
 
@@ -217,7 +214,7 @@ namespace ComuniApi.Migrations
                             ComunidadId = 1,
                             Email = "",
                             NombreCompleto = "Administrador Principal",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJMWmqGEeofwL3f2r0uCFpykRHUwRHd2S3axzTA2Ox0AVE1hxv7oB/FeWzQJcPb/aA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEcpKfy6XatUxQmYnTp6GeasWJ4MbuTSE2+amRofhH+t7QnJf0S2WrBJLMbTGClb4Q==",
                             RolId = 3,
                             Username = "administrador"
                         });
@@ -225,18 +222,11 @@ namespace ComuniApi.Migrations
 
             modelBuilder.Entity("ComuniApi.DAL.Entidades.EdoCuentaEntity", b =>
                 {
-                    b.HasOne("ComuniApi.DAL.Entidades.ConceptoEntity", "Concepto")
-                        .WithMany("EdoCuentas")
-                        .HasForeignKey("ConceptoId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("ComuniApi.DAL.Entidades.UsuarioEntity", "Usuario")
                         .WithMany("EdoCuentas")
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("Concepto");
 
                     b.Navigation("Usuario");
                 });
@@ -263,11 +253,6 @@ namespace ComuniApi.Migrations
             modelBuilder.Entity("ComuniApi.DAL.Entidades.ComunidadEntity", b =>
                 {
                     b.Navigation("Usuarios");
-                });
-
-            modelBuilder.Entity("ComuniApi.DAL.Entidades.ConceptoEntity", b =>
-                {
-                    b.Navigation("EdoCuentas");
                 });
 
             modelBuilder.Entity("ComuniApi.DAL.Entidades.UsuarioEntity", b =>

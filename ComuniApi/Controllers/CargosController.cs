@@ -1,10 +1,12 @@
 ﻿using ComuniApi.BLL.EdoCuentas;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComuniApi.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class CargosController : ControllerBase
     {
@@ -15,6 +17,7 @@ namespace ComuniApi.Controllers
             _edoCuentasService = edoCuentasService;
         }
 
+        [Authorize(Roles = Constantes.Roles.Administrador)]
         [HttpPost("AddCargo")]
         public async Task<IActionResult> AddCargo(CargoAddReq model)
         {
@@ -22,6 +25,7 @@ namespace ComuniApi.Controllers
             return StatusCode((int)response.Status, response);
         }
 
+        [Authorize(Roles = Constantes.Roles.Administrador)]
         [HttpPost("AddPago")]
         public async Task<IActionResult> AddPago(PagoAddReq model)
         {

@@ -39,6 +39,7 @@ namespace ComuniApi.BLL.Users
                 NombreCompleto = model.Nombre,
                 Email = model.Correo,
                 ComunidadId = model.ComunidadId,
+                RolId = 1
             };
 
             usuario.PasswordHash = _hasher.HashPassword(usuario, model.Password);
@@ -61,7 +62,8 @@ namespace ComuniApi.BLL.Users
                     Nombre = usuario.NombreCompleto,
                     Correo = usuario.Email,
                     ComunidadId = usuario.ComunidadId,
-                    Comunidad = comunidad.Nombre
+                    Comunidad = comunidad.Nombre,
+                    Rol = "Usuario"
                 },
             };
         }
@@ -72,6 +74,7 @@ namespace ComuniApi.BLL.Users
             {
                 var usuario = await _context.Usuarios
                     .Include(u => u.Comunidad)
+                    .Include(u => u.Rol)
                     .SingleOrDefaultAsync(u => u.ComunidadId == model.ComunidadId && u.Username == model.Username);
                 if (usuario == null) return new GenericResponse<UserModel>
                 {
@@ -102,6 +105,7 @@ namespace ComuniApi.BLL.Users
                             Correo = usuario.Email,
                             ComunidadId = usuario.ComunidadId,
                             Comunidad = usuario.Comunidad.Nombre,
+                            Rol = usuario.Rol.Descripcion
                         },
                     };
                 }
