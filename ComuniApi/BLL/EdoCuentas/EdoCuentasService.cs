@@ -20,9 +20,9 @@ namespace ComuniApi.BLL.EdoCuentas
         {
             try
             {
-                var comunidadid = _authService.ObtenerIdComunidad();
+                var comunidadid = _authService.ObtenerCodigoComunidad();
                 var user = await _context.Usuarios
-                    .FirstOrDefaultAsync(u => u.Id == model.UsuarioId && u.ComunidadId == comunidadid);
+                    .FirstOrDefaultAsync(u => u.Id == model.UsuarioId && u.Comunidad.CodigoComunidad == comunidadid);
 
                 if (user == null)
                 {
@@ -73,9 +73,9 @@ namespace ComuniApi.BLL.EdoCuentas
         {
             try
             {
-                var comunidadid = _authService.ObtenerIdComunidad();
+                var comunidadid = _authService.ObtenerCodigoComunidad();
                 var user = await _context.Usuarios
-                    .FirstOrDefaultAsync(u => u.Id == model.UsuarioId && u.ComunidadId == comunidadid);
+                    .FirstOrDefaultAsync(u => u.Id == model.UsuarioId && u.Comunidad.CodigoComunidad == comunidadid);
 
                 if (user == null)
                 {

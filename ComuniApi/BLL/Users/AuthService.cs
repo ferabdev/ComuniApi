@@ -144,15 +144,15 @@ namespace ComuniApi.BLL.Users
             return userId;
         }
 
-        public int ObtenerIdComunidad()
+        public string ObtenerCodigoComunidad()
         {
             var httpContext = _httpContextAccessor.HttpContext;
             if (httpContext == null) throw new Exception("No se encontro el httpcontext");
 
-            var comunidadIdClaim = httpContext.User.Claims.FirstOrDefault(c => c.Type == "ComunidadId");
-            var comunidadId = comunidadIdClaim != null ? int.Parse(comunidadIdClaim.Value) : 0;
+            var CodigoComunidadClaim = httpContext.User.Claims.FirstOrDefault(c => c.Type == "CodigoComunidad");
+            var CodigoComunidad = CodigoComunidadClaim?.Value ?? "";
 
-            return comunidadId;
+            return CodigoComunidad;
         }
     }
 }
