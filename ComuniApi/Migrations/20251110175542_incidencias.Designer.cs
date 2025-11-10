@@ -4,6 +4,7 @@ using ComuniApi.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ComuniApi.Migrations
 {
     [DbContext(typeof(ComuniContext))]
-    partial class ComuniContextModelSnapshot : ModelSnapshot
+    [Migration("20251110175542_incidencias")]
+    partial class incidencias
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -307,16 +310,6 @@ namespace ComuniApi.Migrations
                             PasswordHash = "AQAAAAIAAYagAAAAEJMWmqGEeofwL3f2r0uCFpykRHUwRHd2S3axzTA2Ox0AVE1hxv7oB/FeWzQJcPb/aA==",
                             RolId = 3,
                             Username = "administrador"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ComunidadId = 1,
-                            Email = "",
-                            NombreCompleto = "Administrador",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJMWmqGEeofwL3f2r0uCFpykRHUwRHd2S3axzTA2Ox0AVE1hxv7oB/FeWzQJcPb/aA==",
-                            RolId = 2,
-                            Username = "admin"
                         });
                 });
 

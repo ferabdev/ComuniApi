@@ -1,5 +1,4 @@
 ﻿using ComuniApi.DAL.Entidades;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 
@@ -14,6 +13,8 @@ namespace ComuniApi.DAL
         public DbSet<ComunidadEntity> Comunidades { get; set; }
         public DbSet<UsuarioEntity> Usuarios { get; set; }
         public DbSet<RolEntity> Roles { get; set; }
+        public DbSet<IncidenciaEntity> Incidencias { get; set; }
+        public DbSet<IncidenciaEstatusEntity> IncidenciasEstatus { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,6 +47,11 @@ namespace ComuniApi.DAL
                       .WithOne(e => e.Comunidad)
                       .HasForeignKey(e => e.ComunidadId)
                       .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasMany(e => e.Incidencias)
+                      .WithOne(e => e.Comunidad)
+                      .HasForeignKey(e => e.ComunidadId)
+                      .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<EdoCuentaEntity>(entity =>
@@ -71,20 +77,31 @@ namespace ComuniApi.DAL
 
             modelBuilder.Entity<UsuarioEntity>(entity =>
             {
-                var usuario = new UsuarioEntity
+                var usuarios = new List<UsuarioEntity>()
                 {
-                    Id = 1,
-                    Username = "administrador",
-                    NombreCompleto = "Administrador Principal",
-                    Email = "",
-                    ComunidadId = 1,
-                    RolId = 3,
-                    PasswordHash = "AQAAAAIAAYagAAAAEJMWmqGEeofwL3f2r0uCFpykRHUwRHd2S3axzTA2Ox0AVE1hxv7oB/FeWzQJcPb/aA=="
+                    new UsuarioEntity
+                    {
+                        Id = 1,
+                        Username = "administrador",
+                        NombreCompleto = "Administrador Principal",
+                        Email = "",
+                        ComunidadId = 1,
+                        RolId = 3,
+                        PasswordHash = "AQAAAAIAAYagAAAAEJMWmqGEeofwL3f2r0uCFpykRHUwRHd2S3axzTA2Ox0AVE1hxv7oB/FeWzQJcPb/aA=="
+                    },
+                    new UsuarioEntity
+                    {
+                        Id = 2,
+                        Username = "admin",
+                        NombreCompleto = "Administrador",
+                        Email = "",
+                        ComunidadId = 1,
+                        RolId = 2,
+                        PasswordHash = "AQAAAAIAAYagAAAAEJMWmqGEeofwL3f2r0uCFpykRHUwRHd2S3axzTA2Ox0AVE1hxv7oB/FeWzQJcPb/aA=="
+                    }
                 };
 
-                entity.HasData(
-                    usuario
-                );
+                entity.HasData(usuarios);
 
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
@@ -131,6 +148,42 @@ namespace ComuniApi.DAL
                       .WithOne(e => e.Rol)
                       .HasForeignKey(e => e.RolId)
                       .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<IncidenciaEntity>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.ComunidadId).IsRequired();
+                entity.Property(e => e.UserId).IsRequired();
+                entity.Property(e => e.Titulo).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(500);
+                entity.Property(e => e.FechaRegistro).IsRequired();
+                entity.Property(e => e.EstatusId).IsRequired();
+                entity.HasOne(e => e.Usuario)
+                      .WithMany()
+                      .HasForeignKey(e => e.UserId)
+                      .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(e => e.Comunidad)
+                      .WithMany(e => e.Incidencias)
+                      .HasForeignKey(e => e.ComunidadId)
+                      .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(e => e.Estatus)
+                      .WithMany(e => e.Incidencias)
+                      .HasForeignKey(e => e.EstatusId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<IncidenciaEstatusEntity>(entity =>
+            {
+                entity.HasData(
+                    new IncidenciaEstatusEntity { Id = 1, Descripcion = "Pendiente" },
+                    new IncidenciaEstatusEntity { Id = 2, Descripcion = "En Proceso" },
+                    new IncidenciaEstatusEntity { Id = 3, Descripcion = "Cerrada" }
+                    );
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(50);
             });
         }
     }

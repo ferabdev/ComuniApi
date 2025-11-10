@@ -10,5 +10,6 @@
         public string CodigoComunidad { get; set; }
 
         public virtual ICollection<UsuarioEntity> Usuarios { get; set; } = new List<UsuarioEntity>();
+        public virtual ICollection<IncidenciaEntity> Incidencias { get; set; } = new List<IncidenciaEntity>();
     }
 }
