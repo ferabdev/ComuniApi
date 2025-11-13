@@ -10,9 +10,9 @@ namespace ComuniApi.Controllers
     [Authorize]
     public class MantenimientoController : ControllerBase
     {
-        private readonly MantenimientoService _mantenimientoService;
+        private readonly IncidenciasService _mantenimientoService;
 
-        public MantenimientoController(MantenimientoService mantenimientoService)
+        public MantenimientoController(IncidenciasService mantenimientoService)
         {
             _mantenimientoService = mantenimientoService;
         }

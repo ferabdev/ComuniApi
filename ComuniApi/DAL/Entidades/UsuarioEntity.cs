@@ -23,5 +23,7 @@ namespace ComuniApi.DAL.Entidades
         public virtual RolEntity Rol { get; set; } = null!;
         public virtual ComunidadEntity Comunidad { get; set; } = null!;
         public virtual ICollection<EdoCuentaEntity> EdoCuentas { get; set; } = new List<EdoCuentaEntity>();
+        public virtual ICollection<ReporteEntity> Reportes { get; set; } = new List<ReporteEntity>();
+        public virtual ICollection<IncidenciaEntity> Incidencias { get; set; } = new List<IncidenciaEntity>();
     }
 }

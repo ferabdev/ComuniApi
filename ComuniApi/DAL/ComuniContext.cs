@@ -15,6 +15,8 @@ namespace ComuniApi.DAL
         public DbSet<RolEntity> Roles { get; set; }
         public DbSet<IncidenciaEntity> Incidencias { get; set; }
         public DbSet<IncidenciaEstatusEntity> IncidenciasEstatus { get; set; }
+        public DbSet<ReporteEntity> Reportes { get; set; }
+        public DbSet<ReporteEstatusEntity> ReportesEstatus { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,11 +46,6 @@ namespace ComuniApi.DAL
                 entity.Property(e => e.CodigoComunidad).IsRequired().HasMaxLength(6).HasDefaultValue("-");
 
                 entity.HasMany(e => e.Usuarios)
-                      .WithOne(e => e.Comunidad)
-                      .HasForeignKey(e => e.ComunidadId)
-                      .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasMany(e => e.Incidencias)
                       .WithOne(e => e.Comunidad)
                       .HasForeignKey(e => e.ComunidadId)
                       .OnDelete(DeleteBehavior.Restrict);
@@ -154,7 +151,6 @@ namespace ComuniApi.DAL
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
-                entity.Property(e => e.ComunidadId).IsRequired();
                 entity.Property(e => e.UserId).IsRequired();
                 entity.Property(e => e.Titulo).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(500);
@@ -164,9 +160,10 @@ namespace ComuniApi.DAL
                       .WithMany()
                       .HasForeignKey(e => e.UserId)
                       .OnDelete(DeleteBehavior.Restrict);
-                entity.HasOne(e => e.Comunidad)
+
+                entity.HasOne(e => e.Usuario)
                       .WithMany(e => e.Incidencias)
-                      .HasForeignKey(e => e.ComunidadId)
+                      .HasForeignKey(e => e.UserId)
                       .OnDelete(DeleteBehavior.Restrict);
                 entity.HasOne(e => e.Estatus)
                       .WithMany(e => e.Incidencias)
@@ -180,6 +177,39 @@ namespace ComuniApi.DAL
                     new IncidenciaEstatusEntity { Id = 1, Descripcion = "Pendiente" },
                     new IncidenciaEstatusEntity { Id = 2, Descripcion = "En Proceso" },
                     new IncidenciaEstatusEntity { Id = 3, Descripcion = "Cerrada" }
+                    );
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ReporteEntity>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.UserId).IsRequired();
+                entity.Property(e => e.Titulo).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(500);
+                entity.Property(e => e.FechaRegistro).IsRequired();
+                entity.Property(e => e.EstatusId).IsRequired();
+
+                entity.HasOne(e => e.Usuario)
+                      .WithMany(e => e.Reportes)
+                      .HasForeignKey(e => e.UserId)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.Estatus)
+                      .WithMany(e => e.Reportes)
+                      .HasForeignKey(e => e.EstatusId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<ReporteEstatusEntity>(entity =>
+            {
+                entity.HasData(
+                    new ReporteEstatusEntity { Id = 1, Descripcion = "Pendiente" },
+                    new ReporteEstatusEntity { Id = 2, Descripcion = "En Proceso" },
+                    new ReporteEstatusEntity { Id = 3, Descripcion = "Resuelto" }
                     );
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();

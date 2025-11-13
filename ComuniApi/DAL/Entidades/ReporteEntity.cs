@@ -1,6 +1,8 @@
-﻿namespace ComuniApi.DAL.Entidades
+﻿using ComuniApi.BLL.Users;
+
+namespace ComuniApi.DAL.Entidades
 {
-    public class IncidenciaEntity
+    public class ReporteEntity
     {
         public int Id { get; set; }
         public int UserId { get; set; }
@@ -10,6 +12,6 @@
         public int EstatusId { get; set; }
 
         public UsuarioEntity Usuario { get; set; } = null!;
-        public IncidenciaEstatusEntity Estatus { get; set; } = null!;
+        public ReporteEstatusEntity Estatus { get; set; } = null!;
     }
 }

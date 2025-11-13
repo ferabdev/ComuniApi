@@ -2,6 +2,7 @@ using ComuniApi.BLL.Comunidades;
 using ComuniApi.BLL.Conceptos;
 using ComuniApi.BLL.EdoCuentas;
 using ComuniApi.BLL.Mantenimiento;
+using ComuniApi.BLL.Reportes;
 using ComuniApi.BLL.Users;
 using ComuniApi.DAL;
 using Microsoft.AspNetCore.Identity;
@@ -75,7 +76,8 @@ builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ConceptosService>();
 builder.Services.AddScoped<EdoCuentasService>();
 builder.Services.AddScoped<ComunidadService>();
-builder.Services.AddScoped<MantenimientoService>();
+builder.Services.AddScoped<IncidenciasService>();
+builder.Services.AddScoped<ReportesService>();
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>

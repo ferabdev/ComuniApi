@@ -4,6 +4,7 @@ using ComuniApi.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ComuniApi.Migrations
 {
     [DbContext(typeof(ComuniContext))]
-    partial class ComuniContextModelSnapshot : ModelSnapshot
+    [Migration("20251111175222_Reportes_de_seguridad")]
+    partial class Reportes_de_seguridad
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -258,29 +261,11 @@ namespace ComuniApi.Migrations
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReportesEstatus");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Descripcion = "Pendiente"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Descripcion = "En Proceso"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Descripcion = "Resuelto"
-                        });
+                    b.ToTable("ReporteEstatusEntity");
                 });
 
             modelBuilder.Entity("ComuniApi.DAL.Entidades.RolEntity", b =>
