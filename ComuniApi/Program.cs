@@ -1,6 +1,7 @@
 using ComuniApi.BLL.Comunidades;
 using ComuniApi.BLL.Conceptos;
 using ComuniApi.BLL.EdoCuentas;
+using ComuniApi.BLL.Foros;
 using ComuniApi.BLL.Mantenimiento;
 using ComuniApi.BLL.Reportes;
 using ComuniApi.BLL.Users;
@@ -78,6 +79,7 @@ builder.Services.AddScoped<EdoCuentasService>();
 builder.Services.AddScoped<ComunidadService>();
 builder.Services.AddScoped<IncidenciasService>();
 builder.Services.AddScoped<ReportesService>();
+builder.Services.AddScoped<ForosService>();
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>

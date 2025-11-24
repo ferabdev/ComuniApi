@@ -17,7 +17,8 @@ namespace ComuniApi.DAL
         public DbSet<IncidenciaEstatusEntity> IncidenciasEstatus { get; set; }
         public DbSet<ReporteEntity> Reportes { get; set; }
         public DbSet<ReporteEstatusEntity> ReportesEstatus { get; set; }
-
+        public DbSet<ForoEntity> Foros { get; set; }
+        public DbSet<ForoComentarioEntity> ForoComentarios { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -214,6 +215,39 @@ namespace ComuniApi.DAL
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
                 entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ForoEntity>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.Nombre).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.FechaCreacion).IsRequired();
+                entity.Property(e => e.ComunidadId).IsRequired();
+
+                entity.HasOne(e => e.Comunidad)
+                      .WithMany(e => e.Foros)
+                      .HasForeignKey(e => e.ComunidadId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<ForoComentarioEntity>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.ForoId).IsRequired();
+                entity.Property(e => e.UsuarioId).IsRequired();
+                entity.Property(e => e.Mensaje).IsRequired().HasMaxLength(500);
+                entity.Property(e => e.Fecha).IsRequired();
+
+                entity.HasOne(e => e.Foro)
+                      .WithMany(e => e.Comentarios)
+                      .HasForeignKey(e => e.ForoId)
+                      .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(e => e.Usuario)
+                      .WithMany()
+                      .HasForeignKey(e => e.UsuarioId)
+                      .OnDelete(DeleteBehavior.Restrict);
             });
         }
     }
