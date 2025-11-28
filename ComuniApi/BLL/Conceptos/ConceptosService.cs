@@ -31,6 +31,7 @@ namespace ComuniApi.BLL.Conceptos
                 {
                     Status = System.Net.HttpStatusCode.InternalServerError,
                     Message = "Error al obtener los conceptos.",
+                    ExtraInfo = ex.Message
                 };
             }
         }

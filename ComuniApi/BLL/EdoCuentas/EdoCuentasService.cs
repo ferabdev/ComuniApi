@@ -65,6 +65,7 @@ namespace ComuniApi.BLL.EdoCuentas
                 {
                     Status = System.Net.HttpStatusCode.InternalServerError,
                     Message = "Error al procesar la solicitud.",
+                    ExtraInfo = ex.Message
                 };
             }
         }
@@ -129,6 +130,7 @@ namespace ComuniApi.BLL.EdoCuentas
                 {
                     Status = System.Net.HttpStatusCode.InternalServerError,
                     Message = "Error al procesar la solicitud.",
+                    ExtraInfo = ex.Message
                 };
             }
         }
@@ -170,6 +172,7 @@ namespace ComuniApi.BLL.EdoCuentas
                 {
                     Status = System.Net.HttpStatusCode.InternalServerError,
                     Message = "Error al procesar la solicitud.",
+                    ExtraInfo = ex.Message
                 };
             }
         }

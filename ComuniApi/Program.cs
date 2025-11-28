@@ -66,7 +66,7 @@ builder.Services.AddSwaggerGen(options =>
     options.AddSecurityRequirement(securityRequirement);
 });
 
-builder.Services.AddDbContext<ComuniApi.DAL.ComuniContext>(options =>
+builder.Services.AddDbContext<ComuniContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("ComuniDB"),
         new MySqlServerVersion(new Version(8, 0, 43))

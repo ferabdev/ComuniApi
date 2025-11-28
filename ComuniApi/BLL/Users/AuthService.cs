@@ -129,6 +129,7 @@ namespace ComuniApi.BLL.Users
                 {
                     Status = HttpStatusCode.InternalServerError,
                     Message = "Error al procesar el login",
+                    ExtraInfo = ex.Message
                 };
             }
         }

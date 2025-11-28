@@ -7,6 +7,8 @@
         public DateTime FechaCreacion { get; set; }
 
         public new List<ForoComentarioRes> Comentarios { get; set; } = [];
+        public List<VotacionOpcionRes> Opciones { get; set; } = new();
+        public bool EsVotacion { get; set; }
     }
 
     public class ForoComentarioRes : ForoComentarioReq

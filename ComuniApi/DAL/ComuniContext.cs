@@ -19,6 +19,8 @@ namespace ComuniApi.DAL
         public DbSet<ReporteEstatusEntity> ReportesEstatus { get; set; }
         public DbSet<ForoEntity> Foros { get; set; }
         public DbSet<ForoComentarioEntity> ForoComentarios { get; set; }
+        public DbSet<ForoVotacionOpcionEntity> ForoVotacionOpciones { get; set; }
+        public DbSet<ForoVotoUsuarioEntity> ForosVotosUsuarios { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -224,10 +226,15 @@ namespace ComuniApi.DAL
                 entity.Property(e => e.Nombre).IsRequired().HasMaxLength(100);
                 entity.Property(e => e.FechaCreacion).IsRequired();
                 entity.Property(e => e.ComunidadId).IsRequired();
+                entity.Property(e => e.Votacion).IsRequired().HasDefaultValue(false);
 
                 entity.HasOne(e => e.Comunidad)
                       .WithMany(e => e.Foros)
                       .HasForeignKey(e => e.ComunidadId)
+                      .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(e => e.Usuario)
+                      .WithMany(e => e.Foros)
+                      .HasForeignKey(e => e.UsuarioId)
                       .OnDelete(DeleteBehavior.Restrict);
             });
 
@@ -247,6 +254,44 @@ namespace ComuniApi.DAL
                 entity.HasOne(e => e.Usuario)
                       .WithMany()
                       .HasForeignKey(e => e.UsuarioId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<ForoVotacionOpcionEntity>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.ForoId).IsRequired();
+                entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(100);
+                entity.Property(e => e.Votos).IsRequired().HasDefaultValue(0);
+
+                entity.HasOne(e => e.Foro)
+                      .WithMany(e => e.Opciones)
+                      .HasForeignKey(e => e.ForoId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<ForoVotoUsuarioEntity>(entity =>
+            {
+                entity.HasKey(e => new { e.ForoId, e.UsuarioId });
+                entity.HasIndex(e => new { e.ForoId, e.UsuarioId }).IsUnique();
+
+                entity.Property(e => e.ForoId).IsRequired();
+                entity.Property(e => e.UsuarioId).IsRequired();
+                entity.Property(e => e.OpcionId).IsRequired();
+
+
+                entity.HasOne(e => e.Foro)
+                      .WithMany(e => e.VotosUsuarios)
+                      .HasForeignKey(e => e.ForoId)
+                      .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(e => e.Usuario)
+                      .WithMany(e => e.VotosUsuarios)
+                      .HasForeignKey(e => e.UsuarioId)
+                      .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(e => e.Opcion)
+                      .WithMany(e => e.VotosUsuarios)
+                      .HasForeignKey(e => e.OpcionId)
                       .OnDelete(DeleteBehavior.Restrict);
             });
         }

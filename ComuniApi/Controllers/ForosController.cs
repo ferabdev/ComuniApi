@@ -42,5 +42,19 @@ namespace ComuniApi.Controllers
             var response = await _forosService.ComentarForo(model);
             return StatusCode((int)response.Status, response);
         }
+
+        [HttpPost("CrearVotacion")]
+        public async Task<IActionResult> CrearVotacion([FromBody] VotacionReq model)
+        {
+            var response = await _forosService.CrearVotacion(model);
+            return StatusCode((int)response.Status, response);
+        }
+
+        [HttpPost("Votar")]
+        public async Task<IActionResult> Votar([FromBody] VotarReq model)
+        {
+            var response = await _forosService.VotarEnVotacion(model);
+            return StatusCode((int)response.Status, response);
+        }
     }
 }

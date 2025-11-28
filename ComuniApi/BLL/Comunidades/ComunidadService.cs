@@ -99,7 +99,7 @@ namespace ComuniApi.BLL.Comunidades
                 {
                     Status = System.Net.HttpStatusCode.InternalServerError,
                     Message = "Error al crear la comunidad.",
-                    Data = ""
+                    ExtraInfo = ex.Message
                 };
             }
         }
