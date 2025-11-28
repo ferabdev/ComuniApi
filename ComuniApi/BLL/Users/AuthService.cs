@@ -35,7 +35,7 @@ namespace ComuniApi.BLL.Users
             // Verificar si ya existe
             var exists = await _context.Usuarios
                 .AnyAsync(u => u.Id == comunidad.Id 
-                && (u.Username == model.Nombre || u.Email == model.Correo));
+                && (u.Username == model.Usuario || u.Email == model.Correo));
 
             if (exists) return new GenericResponse<UserModel>
             {
