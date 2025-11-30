@@ -10,7 +10,7 @@ namespace ComuniApi.BLL.Users
     {
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
-        public string CodigoComunidad { get; set; }
+        public string CodigoComunidad { get; set; } = string.Empty;
     }
 
     public class AuthRes

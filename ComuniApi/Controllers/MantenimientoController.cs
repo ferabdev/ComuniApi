@@ -1,4 +1,5 @@
 ﻿using ComuniApi.BLL.Mantenimiento;
+using ComuniApi.Controllers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,25 +11,25 @@ namespace ComuniApi.Controllers
     [Authorize]
     public class MantenimientoController : ControllerBase
     {
-        private readonly IncidenciasService _mantenimientoService;
+        private readonly IncidenciasService _incidenciaService;
 
-        public MantenimientoController(IncidenciasService mantenimientoService)
+        public MantenimientoController(IncidenciasService incidenciasService)
         {
-            _mantenimientoService = mantenimientoService;
+            _incidenciaService = incidenciasService;
         }
 
         [HttpPost("AgregarIncidencia")]
-        [Authorize(Roles = Constantes.Roles.Administrador)]
+        //[Authorize(Roles = Constantes.Roles.Administrador)]
         public async Task<IActionResult> AgregarIncidencia(IncidenciaReq model)
         {
-            var response = await _mantenimientoService.AgregarIncidencia(model);
+            var response = await _incidenciaService.AgregarIncidencia(model);
             return StatusCode((int)response.Status, response);
         }
 
         [HttpGet("ObtenerIncidencias")]
         public async Task<IActionResult> ObtenerIncidencias()
         {
-            var response = await _mantenimientoService.ObtenerIncidencias();
+            var response = await _incidenciaService.ObtenerIncidencias();
             return StatusCode((int)response.Status, response);
         }
 
@@ -36,7 +37,7 @@ namespace ComuniApi.Controllers
         [Authorize(Roles = Constantes.Roles.Administrador)]
         public async Task<IActionResult> ActualizarIncidencia(IncidenciaUpdReq model)
         {
-            var response = await _mantenimientoService.ActualizarIncidencia(model);
+            var response = await _incidenciaService.ActualizarIncidencia(model);
             return StatusCode((int)response.Status, response);
         }
     }

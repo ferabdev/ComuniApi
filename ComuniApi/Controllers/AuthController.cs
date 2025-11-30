@@ -15,19 +15,18 @@ namespace ComuniApi.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _config;
-        //private readonly LogsService _logsService;
-        private readonly AuthService _accountService;
+        private readonly AuthService _authService;
 
-        public AuthController(IConfiguration config, AuthService accountService)
+        public AuthController(IConfiguration config, AuthService authService)
         {
             _config = config;
-            _accountService = accountService;
+            _authService = authService;
         }
 
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] AuthReq model)
         {
-            var result = await _accountService.Login(model);
+            var result = await _authService.Login(model);
             if (result.Exitoso && result.Data != null)
             {
                 var key = new SymmetricSecurityKey(
@@ -70,7 +69,7 @@ namespace ComuniApi.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] UserModelReq model)
         {
-            var result = await _accountService.RegisterAsync(model);
+            var result = await _authService.RegisterAsync(model);
             if (result.Exitoso && result.Data != null)
             {
                 var key = new SymmetricSecurityKey(

@@ -106,7 +106,7 @@ namespace ComuniApi.BLL.Comunidades
 
         private static readonly char[] _chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789".ToCharArray();
 
-        public string GenerateCommunityCode(int length = 6)
+        private string GenerateCommunityCode(int length = 6)
         {
             var random = new Random();
             var result = new char[length];

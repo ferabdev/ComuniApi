@@ -13,12 +13,17 @@ namespace ComuniApi.BLL.Conceptos
             _context = context;
         }
 
-        public async Task<GenericResponse<List<ConceptoEntity>>> ObtenerConceptos()
+        public async Task<GenericResponse<List<ConceptoRes>>> ObtenerConceptos()
         {
             try
             {
-                var res = await _context.Conceptos.ToListAsync();
-                return new GenericResponse<List<ConceptoEntity>>
+                var res = await _context.Conceptos
+                    .Select(c => new ConceptoRes
+                    {
+                        Id = c.Id,
+                        Descripcion = c.Descripcion
+                    }).ToListAsync();
+                return new GenericResponse<List<ConceptoRes>>
                 {
                     Status = System.Net.HttpStatusCode.OK,
                     Message = "Conceptos obtenidos exitosamente.",
@@ -27,7 +32,7 @@ namespace ComuniApi.BLL.Conceptos
             }
             catch (Exception ex)
             {
-                return new GenericResponse<List<ConceptoEntity>>
+                return new GenericResponse<List<ConceptoRes>>
                 {
                     Status = System.Net.HttpStatusCode.InternalServerError,
                     Message = "Error al obtener los conceptos.",
