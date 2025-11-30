@@ -156,7 +156,8 @@ namespace ComuniApi.BLL.EdoCuentas
                         Concepto = e.Descripcion,
                         Monto = e.Monto,
                         Fecha = e.Fecha,
-                        FechaLimite = DateOnly.FromDateTime(e.FechaLimite)
+                        FechaLimite = DateOnly.FromDateTime(e.FechaLimite),
+                        Estatus = e.Estatus.Descripcion
                     })
                     .ToListAsync();
                 return new GenericResponse<List<MovtosRes>>

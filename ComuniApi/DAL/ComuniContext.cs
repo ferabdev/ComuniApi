@@ -9,6 +9,7 @@ namespace ComuniApi.DAL
         public ComuniContext(DbContextOptions<ComuniContext> options) : base(options) { }
 
         public DbSet<EdoCuentaEntity> EdoCuentas { get; set; }
+        public DbSet<MovtoEstatusEntity> MovtosEstatus { get; set; }
         public DbSet<ConceptoEntity> Conceptos { get; set; }
         public DbSet<ComunidadEntity> Comunidades { get; set; }
         public DbSet<UsuarioEntity> Usuarios { get; set; }
@@ -64,6 +65,7 @@ namespace ComuniApi.DAL
                 entity.Property(e => e.UsuarioId).IsRequired();
                 entity.Property(e => e.ConceptoId);
                 entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.EstatusId).IsRequired().HasDefaultValue(2);
 
                 entity.HasOne(e => e.Usuario)
                       .WithMany(e => e.EdoCuentas)
@@ -73,6 +75,22 @@ namespace ComuniApi.DAL
                         .WithMany(e => e.EdoCuentas)
                         .HasForeignKey(e => e.ConceptoId)
                         .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(e => e.Estatus)
+                      .WithMany(e => e.EdoCuentas)
+                      .HasForeignKey(e => e.EstatusId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            modelBuilder.Entity<MovtoEstatusEntity>(entity =>
+            {
+                entity.HasData(
+                    new RolEntity { Id = 1, Descripcion = "Creado" },
+                    new RolEntity { Id = 2, Descripcion = "Confirmado" },
+                    new RolEntity { Id = 3, Descripcion = "Cancelado" }
+                    );
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.Descripcion).IsRequired().HasMaxLength(50);
             });
 
             modelBuilder.Entity<UsuarioEntity>(entity =>
