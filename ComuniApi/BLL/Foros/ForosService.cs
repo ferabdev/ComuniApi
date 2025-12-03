@@ -103,18 +103,21 @@ namespace ComuniApi.BLL.Foros
                         Message = "Comunidad no encontrada."
                     };
                 }
-                var foros = await _context.Foros
+                var result = await _context.Foros
                     .Where(f => f.Comunidad.CodigoComunidad == comunidadCod)
+                    .Include(f => f.Comentarios)
                     .Include(f => f.Usuario)
                     .Include(f => f.Opciones)
-                    .ToListAsync();
-                var result = foros.Select(f => new ForoRes
+                    .Select(f => new ForoRes
                 {
                     Id = f.Id,
                     Nombre = f.Nombre,
                     FechaCreacion = f.FechaCreacion,
                     Usuario = f.Usuario.Username,
-                    Comentarios = new List<ForoComentarioRes>(),
+                    Comentarios = f.Comentarios.OrderBy(c => c.Fecha).Take(1).Select(c => new ForoComentarioRes
+                    {
+                        Mensaje = c.Mensaje,
+                    }).ToList(),
                     EsVotacion = f.Votacion,
                     Opciones = f.Opciones.Select(o => new VotacionOpcionRes
                     {
@@ -122,7 +125,7 @@ namespace ComuniApi.BLL.Foros
                         Descripcion = o.Descripcion,
                         Votos = o.Votos
                     }).ToList()
-                }).ToList();
+                }).ToListAsync();
 
                 //result.Where(f => f.EsVotacion).ToList().ForEach(votacion =>
                 //{
