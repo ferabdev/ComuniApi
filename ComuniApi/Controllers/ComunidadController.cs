@@ -1,4 +1,5 @@
 ﻿using ComuniApi.BLL.Comunidades;
+using ComuniApi.BLL.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,17 +12,18 @@ namespace ComuniApi.Controllers
     public class ComunidadController : ControllerBase
     {
         private readonly ComunidadService _comunidadService;
+        private readonly AuthService _authService;
 
-        public ComunidadController(ComunidadService comunidadService)
+        public ComunidadController(ComunidadService comunidadService, AuthService authService)
         {
             _comunidadService = comunidadService;
+            _authService = authService;
         }
 
         [HttpGet("ObtenerUsuarios")]
         public async Task<IActionResult> ObtenerUsuarios()
         {
-            var comunidadIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ComunidadId");
-            var comunidadId = comunidadIdClaim != null ? int.Parse(comunidadIdClaim.Value) : 0;
+            var comunidadId = _authService.ObtenerComunidadId();
 
             var response = await _comunidadService.ObtenerUsuariosComunidad(comunidadId);
             return StatusCode((int)response.Status, response);
