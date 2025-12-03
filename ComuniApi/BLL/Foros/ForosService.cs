@@ -109,23 +109,23 @@ namespace ComuniApi.BLL.Foros
                     .Include(f => f.Usuario)
                     .Include(f => f.Opciones)
                     .Select(f => new ForoRes
-                {
-                    Id = f.Id,
-                    Nombre = f.Nombre,
-                    FechaCreacion = f.FechaCreacion,
-                    Usuario = f.Usuario.Username,
-                    Comentarios = f.Comentarios.OrderBy(c => c.Fecha).Take(1).Select(c => new ForoComentarioRes
                     {
-                        Mensaje = c.Mensaje,
-                    }).ToList(),
-                    EsVotacion = f.Votacion,
-                    Opciones = f.Opciones.Select(o => new VotacionOpcionRes
-                    {
-                        OpcionId = o.Id,
-                        Descripcion = o.Descripcion,
-                        Votos = o.Votos
-                    }).ToList()
-                }).ToListAsync();
+                        Id = f.Id,
+                        Nombre = f.Nombre,
+                        FechaCreacion = f.FechaCreacion,
+                        Usuario = f.Usuario.Username,
+                        Comentarios = f.Comentarios.OrderBy(c => c.Fecha).Take(1).Select(c => new ForoComentarioRes
+                        {
+                            Mensaje = c.Mensaje,
+                        }).ToList(),
+                        EsVotacion = f.Votacion,
+                        Opciones = f.Opciones.Select(o => new VotacionOpcionRes
+                        {
+                            OpcionId = o.Id,
+                            Descripcion = o.Descripcion,
+                            Votos = o.Votos
+                        }).ToList()
+                    }).ToListAsync();
 
                 //result.Where(f => f.EsVotacion).ToList().ForEach(votacion =>
                 //{
@@ -170,6 +170,7 @@ namespace ComuniApi.BLL.Foros
                         Nombre = f.Nombre,
                         FechaCreacion = f.FechaCreacion,
                         Usuario = f.Usuario.Username,
+                        EsVotacion = f.Votacion,
                     })
                     .FirstOrDefaultAsync();
                 if (result == null)
@@ -181,17 +182,32 @@ namespace ComuniApi.BLL.Foros
                     };
                 }
 
-                result.Comentarios = await _context.ForoComentarios
-                    .Where(c => c.ForoId == id)
-                    .Include(c => c.Usuario)
-                    .Select(c => new ForoComentarioRes
-                    {
-                        Id = c.Id,
-                        Mensaje = c.Mensaje,
-                        Fecha = c.Fecha,
-                        Usuario = c.Usuario.Username ?? "Desconocido"
-                    })
-                    .ToListAsync();
+                if (result.EsVotacion)
+                {
+                    result.Opciones = await _context.ForoVotacionOpciones
+                        .Where(o => o.ForoId == id)
+                        .Select(o => new VotacionOpcionRes
+                        {
+                            OpcionId = o.Id,
+                            Descripcion = o.Descripcion,
+                            Votos = o.Votos
+                        })
+                        .ToListAsync();
+                }
+                else
+                {
+                    result.Comentarios = await _context.ForoComentarios
+                        .Where(c => c.ForoId == id)
+                        .Include(c => c.Usuario)
+                        .Select(c => new ForoComentarioRes
+                        {
+                            Id = c.Id,
+                            Mensaje = c.Mensaje,
+                            Fecha = c.Fecha,
+                            Usuario = c.Usuario.Username ?? "Desconocido"
+                        })
+                        .ToListAsync();
+                }
 
                 return new GenericResponse<ForoRes>
                 {
@@ -289,7 +305,7 @@ namespace ComuniApi.BLL.Foros
                 {
                     Nombre = model.Asunto,
                     FechaCreacion = DateTime.Now,
-                    ComunidadId  = comunidadId,
+                    ComunidadId = comunidadId,
                     Votacion = true,
                     UsuarioId = usuarioId.Value,
                     Opciones = model.Opciones.Select(o => new ForoVotacionOpcionEntity
