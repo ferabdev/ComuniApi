@@ -68,7 +68,7 @@ namespace ComuniApi.BLL.PagosOnline
                             },
                         },
                         Mode = "payment",
-                        SuccessUrl = "comuniapp://pago-exitoso",
+                        SuccessUrl = "comuniapp://pago",
                         ClientReferenceId = cargo.Id.ToString(),
                     };
                     StripeClient client = new StripeClient(_config["Stripe:SecretKey"]);
